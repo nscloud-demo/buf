@@ -14,14 +14,24 @@ on:
       - main
 jobs:
   codeql:
-    runs-on: ubuntu-latest
+    runs-on:
+      - nscloud-ubuntu-22.04-amd64-8x16-with-cache
+      - nscloud-exp-runner-tool-cache-50gb
+      - nscloud-cache-size-50gb
+      - nscloud-cache-tag-gha-demo-buf
     steps:
       - name: checkout
         uses: actions/checkout@v4
       - name: setup-go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.21.x'
+          go-version: "1.21.x"
+      - name: Setup Go cache
+        uses: namespacelabs/nscloud-cache-action@v1
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
       - name: initialize
         uses: github/codeql-action/init@v2
         with:
